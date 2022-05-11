@@ -1,8 +1,8 @@
-
 import Register from './Register';
 
 function App() {
-  return(
+
+  return (
     <main className="App">
       <Register />
     </main>
@@ -10,5 +10,3 @@ function App() {
 }
 
 export default App;
-
-dfdfd
