@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from './context/AuthProvider';
+import { useRef, useState, useEffect } from 'react';
+import useAuth from '../hooks/useAuth';
 
-import axios from './api/axios';
+import axios from '../api/axios';
 const LOGIN_URL = '/auth'; //* matched in his node.js course :)
 const Login = () => {
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth } = useAuth();
     const userRef = useRef(); //* we'll use this to focus on an element when page loads.
     const errRef = useRef(); //* to connect error to element reference :)
 
