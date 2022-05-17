@@ -11,6 +11,13 @@ import LinkPage from './components/LinkPage';
 import RequiredAuth from './components/RequireAuth';
 import { Routes, Route } from 'react-router-dom';
 
+//Hackers that are good enough could see your javascript
+//they would see this.  Up to you if you want to show it, though ^_^.
+const ROLES = { 
+  'User': 2001,
+  'Editor': 1984,
+  'Admin': 5150
+}
 function App() {
 
   return (
@@ -23,16 +30,22 @@ function App() {
         <Route path="unauthorized" element = { <Unauthorized /> } />
 
         {/* we want to protect these routes */}
-        <Route element={ <RequiredAuth /> }>
+        <Route element={ <RequiredAuth allowedRoles={[ ROLES.User ]}/> }>
           <Route path="/" element = { <Home /> } />
-          <Route path="editor" element = { <Editor /> } />
-          <Route path="admin" element = { <Admin /> } />
-          <Route path="lounge" element = { <Lounge /> } />
-          </Route>
         </Route>
-      
-      {/* catch all */}
-      <Route path="*" element={ <Missing /> } />
+        <Route element={ <RequiredAuth allowedRoles={[ ROLES.Editor ]}/> }>
+          <Route path="editor" element = { <Editor /> } />
+        </Route>
+        <Route element={ <RequiredAuth allowedRoles={[ ROLES.Admin ]}/> }>
+          <Route path="admin" element = { <Admin /> } />
+        </Route>
+        <Route element={ <RequiredAuth allowedRoles={[ ROLES.Editor, ROLES.Admin ]}/> }>
+          <Route path="lounge" element = { <Lounge /> } />
+        </Route>
+
+        {/* catch all */}
+        <Route path="*" element={ <Missing /> } />
+      </Route>
     </Routes>
   );
 }

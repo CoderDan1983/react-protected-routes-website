@@ -1,17 +1,24 @@
 import { useRef, useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import axios from '../api/axios';
 const LOGIN_URL = '/auth'; //* matched in his node.js course :)
 const Login = () => {
     const { setAuth } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+    //* get where they came from.  But if we can't find the pathname,
+    //* give it the default of "/"
+
     const userRef = useRef(); //* we'll use this to focus on an element when page loads.
     const errRef = useRef(); //* to connect error to element reference :)
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    //# const [success, setSuccess] = useState(false);
 
     useEffect(()=>{
         userRef.current.focus();
@@ -41,10 +48,12 @@ const Login = () => {
             setAuth({ user, pwd, roles, accessToken })
             setUser('');
             setPwd('');
-            setSuccess(true);
+            //# setSuccess(true);
+            navigate(from, { replace: true });
         }
         catch(err){
-            if(!err.response){
+            // if(!err.response){
+            if(!err?.response){ //* if there is no error.response / it's falsy!
                 setErrMsg('No Server Response!');
             }
             else if(err.response?.status === 400){
@@ -60,16 +69,16 @@ const Login = () => {
         }
     }
     return (
-        <>
-            { success ? (
-                <section>
-                    <h1>You are logged in!</h1>
-                    <br />
-                    <p>
-                        <a href="#">Go to Home</a>
-                    </p>
-                </section>
-            ) : (
+        //# <>
+        //     { success ? (
+        //         <section>
+        //             <h1>You are logged in!</h1>
+        //             <br />
+        //             <p>
+        //                 <a href="#">Go to Home</a>
+        //             </p>
+        //         </section>
+        //     ) : (
             <section>
                 <p ref={errRef} className={errMsg ? "errmsg" : 
                 "offscreen"} aria-live="assertive">{errMsg}</p>
@@ -105,8 +114,8 @@ const Login = () => {
                     </span>
                 </p>
             </section>
-            )}
-        </>
+        //#     )}
+        // </>
     )
 }
 
