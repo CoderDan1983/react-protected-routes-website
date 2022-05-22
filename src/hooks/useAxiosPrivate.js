@@ -1,5 +1,5 @@
 // This will just attach the axios interceptors to the instance :) 
-//basically, it returns data and grabs a new accesstoken if the old one has expired :)
+// basically, it returns data and grabs a new accesstoken if the old one has expired :)
 import { axiosPrivate } from "../api/axios";
 import { useEffect } from 'react';
 import useRefreshToken from './useRefreshToken';
