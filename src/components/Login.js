@@ -37,7 +37,8 @@ const Login = () => {
                 JSON.stringify({ user, pwd }), //* the "payload"
                 {
                     headers: { 'Content-Type': 'application/json' },
-                    withCredetials: true
+                    withCredentials: true,
+                    //credentials: 'include' //stack overflow advice #2
                 }
             );
             console.log(JSON.stringify(response?.data)); //* ?.  -- this is known as option chaining :)
@@ -69,53 +70,40 @@ const Login = () => {
         }
     }
     return (
-        //# <>
-        //     { success ? (
-        //         <section>
-        //             <h1>You are logged in!</h1>
-        //             <br />
-        //             <p>
-        //                 <a href="#">Go to Home</a>
-        //             </p>
-        //         </section>
-        //     ) : (
-            <section>
-                <p ref={errRef} className={errMsg ? "errmsg" : 
-                "offscreen"} aria-live="assertive">{errMsg}</p>
-                <h1>Sign In</h1>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="username">Username:</label>
-                    <input 
-                        type="text" 
-                        id="username"
-                        ref={userRef}
-                        autoComplete="off"
-                        onChange={ (e)=> setUser(e.target.value) }
-                        value={user} //* this makes this a controlled input
-                        required
-                    />
+        <section>
+            <p ref={errRef} className={errMsg ? "errmsg" : 
+            "offscreen"} aria-live="assertive">{errMsg}</p>
+            <h1>Sign In</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="username">Username:</label>
+                <input 
+                    type="text" 
+                    id="username"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={ (e)=> setUser(e.target.value) }
+                    value={user} //* this makes this a controlled input
+                    required
+                />
 
-                    <label htmlFor="password">Password:</label>
-                    <input 
-                        type="password" 
-                        id="password"
-                        onChange={ (e)=> setPwd(e.target.value) }
-                        value={pwd} //* this makes this a controlled input
-                        required
-                    />
-                    
-                    <button>Sign In</button>
-                </form>
-                <p>
-                    Need an Account?<br />
-                    <span className="line">
-                        {/* put router link here */}
-                        <a href="#">Sign Up</a>
-                    </span>
-                </p>
-            </section>
-        //#     )}
-        // </>
+                <label htmlFor="password">Password:</label>
+                <input 
+                    type="password" 
+                    id="password"
+                    onChange={ (e)=> setPwd(e.target.value) }
+                    value={pwd} //* this makes this a controlled input
+                    required
+                />
+                
+                <button>Sign In</button>
+            </form>
+            <p>
+                Need an Account?<br />
+                <span className="line">
+                    <Link to="/register">Sign Up </Link>
+                </span>
+            </p>
+        </section>
     )
 }
 
