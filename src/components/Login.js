@@ -1,11 +1,13 @@
 import { useRef, useState, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import useInput from '../hooks/useInput';
+import useToggle from '../hooks/useToggle';
 
 import axios from '../api/axios';
 const LOGIN_URL = '/auth'; //* matched in his node.js course :)
 const Login = () => {
-    const { setAuth, persist, setPersist } = useAuth();
+    const { setAuth } = useAuth(); //, persist, setPersist 
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || "/";
@@ -15,9 +17,12 @@ const Login = () => {
     const userRef = useRef(); //* we'll use this to focus on an element when page loads.
     const errRef = useRef(); //* to connect error to element reference :)
 
-    const [user, setUser] = useState('');
+    //# const [user, setUser] = useLocalStorage('user', ''); //useState('');
+    const [user, resetUser, userAttribs] = useInput('user', '');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    const [check, toggleCheck] = useToggle('persist', false);
+
     //# const [success, setSuccess] = useState(false);
 
     useEffect(()=>{
@@ -47,7 +52,8 @@ const Login = () => {
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles; //* he made this for his backend node.js course :)
             setAuth({ user, pwd, roles, accessToken })
-            setUser('');
+            //# setUser('');
+            resetUser();
             setPwd('');
             //# setSuccess(true);
             navigate(from, { replace: true });
@@ -70,12 +76,12 @@ const Login = () => {
         }
     }
 
-    const togglePersist = ()=> {
-        setPersist(prev => !prev);
-    }
-    useEffect(()=>{
-        localStorage.setItem("persist", persist);
-    }, [persist]);
+    //# const togglePersist = ()=> {
+    //     setPersist(prev => !prev);
+    // }
+    // useEffect(()=>{
+    //     localStorage.setItem("persist", persist);
+    // }, [persist]);
     return (
         <section>
             <p ref={errRef} className={errMsg ? "errmsg" : 
@@ -88,8 +94,9 @@ const Login = () => {
                     id="username"
                     ref={userRef}
                     autoComplete="off"
-                    onChange={ (e)=> setUser(e.target.value) }
-                    value={user} //* this makes this a controlled input
+                    //# onChange={ (e)=> setUser(e.target.value) }
+                    //# value={user} //* this makes this a controlled input
+                    { ...userAttribs }
                     required
                 />
 
@@ -107,8 +114,8 @@ const Login = () => {
                     <input 
                         type="checkbox"
                         id="persist"
-                        onChange={togglePersist}
-                        checked={persist}
+                        onChange={toggleCheck} //# togglePersist
+                        checked={check} //# persist
                     />
                     <label htmlFor="persist">Trust ThisDevice?</label>
                 </div>
