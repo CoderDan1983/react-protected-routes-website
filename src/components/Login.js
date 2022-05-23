@@ -50,9 +50,11 @@ const Login = () => {
             //console.log(JSON.stringify(response));
 
             const accessToken = response?.data?.accessToken;
-            const roles = response?.data?.roles; //* he made this for his backend node.js course :)
-            setAuth({ user, pwd, roles, accessToken })
-            //# setUser('');
+
+            // setAuth({ user, pwd, roles, accessToken });
+            setAuth({ user, accessToken }); //* we don't need to keep track of the password here.
+            //* setAuth would hold it for a long time anyway.  PS:  roles aready in the access token 
+            //* so they don't need to be sent seperately ^_^
             resetUser();
             setPwd('');
             //# setSuccess(true);

@@ -11,7 +11,6 @@ const Users = () => {
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
-    // const refresh = useRefreshToken();
 
     useEffect(()=>{
         let isMounted = true;
@@ -24,8 +23,13 @@ const Users = () => {
                 const response = await axiosPrivate.get('/users', { // ./users
                     signal: controller.signal
                 });
+                const userNames = response.data.map(user => user.username); //grab usernames only. :)
                 console.log(response.data);
-                isMounted && setUsers(response.data) //if isMounted, then setUsers :D
+                // console.log(userNames);
+                isMounted && setUsers(userNames) //if isMounted, then setUsers :D
+                console.log('the userState is: ');
+                console.log(users); //why undefined???
+                //the parameter was response.data, but we didn't need to set/send all that :)
             }
             catch (err){
                 console.log("I'm gonna log an error!")
@@ -48,13 +52,15 @@ const Users = () => {
                 users?.length ?
                 (
                    <ul>
-                        { users.map((user, i) => <li key={i}>{ user?.username }</li>) }
+                        { users.map((user, i) => <li key={i}>{user}</li>) }
                    </ul> 
                 )
                 : <p>No users to display</p>
             }
             {/* <button onClick={ () => refresh() }>Refresh</button> 
-            <br />*/}
+            <br />*/
+            //{ user?.username }
+            }
         </article>
     )
 }
